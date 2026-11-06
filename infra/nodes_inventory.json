@@ -1,0 +1,214 @@
+[
+  {
+    "machineType": "https://www.googleapis.com/compute/v1/projects/your-gcp-project-id/zones/us-west1-b/machineTypes/a3-megagpu-8g",
+    "name": "glm-a3mega-mig-tw4q",
+    "networkInterfaces": [
+      {
+        "accessConfigs": [
+          {
+            "kind": "compute#accessConfig",
+            "name": "external-nat",
+            "natIP": "136.69.245.47",
+            "networkTier": "PREMIUM",
+            "type": "ONE_TO_ONE_NAT"
+          }
+        ],
+        "fingerprint": "DBbsastEtyM=",
+        "kind": "compute#networkInterface",
+        "name": "nic0",
+        "network": "https://www.googleapis.com/compute/v1/projects/your-gcp-project-id/global/networks/default",
+        "networkIP": "10.138.0.94",
+        "nicType": "GVNIC",
+        "stackType": "IPV4_ONLY",
+        "subnetwork": "https://www.googleapis.com/compute/v1/projects/your-gcp-project-id/regions/us-west1/subnetworks/default"
+      },
+      {
+        "fingerprint": "3Ktew2hiSsg=",
+        "kind": "compute#networkInterface",
+        "name": "nic1",
+        "network": "https://www.googleapis.com/compute/v1/projects/your-gcp-project-id/global/networks/glm-a3mega-net-1",
+        "networkIP": "192.168.1.3",
+        "nicType": "GVNIC",
+        "stackType": "IPV4_ONLY",
+        "subnetwork": "https://www.googleapis.com/compute/v1/projects/your-gcp-project-id/regions/us-west1/subnetworks/glm-a3mega-sub-1"
+      },
+      {
+        "fingerprint": "yNBymodLZjo=",
+        "kind": "compute#networkInterface",
+        "name": "nic2",
+        "network": "https://www.googleapis.com/compute/v1/projects/your-gcp-project-id/global/networks/glm-a3mega-net-2",
+        "networkIP": "192.168.2.3",
+        "nicType": "GVNIC",
+        "stackType": "IPV4_ONLY",
+        "subnetwork": "https://www.googleapis.com/compute/v1/projects/your-gcp-project-id/regions/us-west1/subnetworks/glm-a3mega-sub-2"
+      },
+      {
+        "fingerprint": "27PgfTLVGFA=",
+        "kind": "compute#networkInterface",
+        "name": "nic3",
+        "network": "https://www.googleapis.com/compute/v1/projects/your-gcp-project-id/global/networks/glm-a3mega-net-3",
+        "networkIP": "192.168.3.3",
+        "nicType": "GVNIC",
+        "stackType": "IPV4_ONLY",
+        "subnetwork": "https://www.googleapis.com/compute/v1/projects/your-gcp-project-id/regions/us-west1/subnetworks/glm-a3mega-sub-3"
+      },
+      {
+        "fingerprint": "2fpRGlZFQyo=",
+        "kind": "compute#networkInterface",
+        "name": "nic4",
+        "network": "https://www.googleapis.com/compute/v1/projects/your-gcp-project-id/global/networks/glm-a3mega-net-4",
+        "networkIP": "192.168.4.3",
+        "nicType": "GVNIC",
+        "stackType": "IPV4_ONLY",
+        "subnetwork": "https://www.googleapis.com/compute/v1/projects/your-gcp-project-id/regions/us-west1/subnetworks/glm-a3mega-sub-4"
+      },
+      {
+        "fingerprint": "SoSwoZNlZrE=",
+        "kind": "compute#networkInterface",
+        "name": "nic5",
+        "network": "https://www.googleapis.com/compute/v1/projects/your-gcp-project-id/global/networks/glm-a3mega-net-5",
+        "networkIP": "192.168.5.3",
+        "nicType": "GVNIC",
+        "stackType": "IPV4_ONLY",
+        "subnetwork": "https://www.googleapis.com/compute/v1/projects/your-gcp-project-id/regions/us-west1/subnetworks/glm-a3mega-sub-5"
+      },
+      {
+        "fingerprint": "3OdOrzpYgMU=",
+        "kind": "compute#networkInterface",
+        "name": "nic6",
+        "network": "https://www.googleapis.com/compute/v1/projects/your-gcp-project-id/global/networks/glm-a3mega-net-6",
+        "networkIP": "192.168.6.3",
+        "nicType": "GVNIC",
+        "stackType": "IPV4_ONLY",
+        "subnetwork": "https://www.googleapis.com/compute/v1/projects/your-gcp-project-id/regions/us-west1/subnetworks/glm-a3mega-sub-6"
+      },
+      {
+        "fingerprint": "YP7s-A3soRk=",
+        "kind": "compute#networkInterface",
+        "name": "nic7",
+        "network": "https://www.googleapis.com/compute/v1/projects/your-gcp-project-id/global/networks/glm-a3mega-net-7",
+        "networkIP": "192.168.7.3",
+        "nicType": "GVNIC",
+        "stackType": "IPV4_ONLY",
+        "subnetwork": "https://www.googleapis.com/compute/v1/projects/your-gcp-project-id/regions/us-west1/subnetworks/glm-a3mega-sub-7"
+      },
+      {
+        "fingerprint": "VZIf_BoN3uA=",
+        "kind": "compute#networkInterface",
+        "name": "nic8",
+        "network": "https://www.googleapis.com/compute/v1/projects/your-gcp-project-id/global/networks/glm-a3mega-net-8",
+        "networkIP": "192.168.8.3",
+        "nicType": "GVNIC",
+        "stackType": "IPV4_ONLY",
+        "subnetwork": "https://www.googleapis.com/compute/v1/projects/your-gcp-project-id/regions/us-west1/subnetworks/glm-a3mega-sub-8"
+      }
+    ],
+    "zone": "https://www.googleapis.com/compute/v1/projects/your-gcp-project-id/zones/us-west1-b"
+  },
+  {
+    "machineType": "https://www.googleapis.com/compute/v1/projects/your-gcp-project-id/zones/us-west1-b/machineTypes/a3-megagpu-8g",
+    "name": "glm-a3mega-mig-x5v7",
+    "networkInterfaces": [
+      {
+        "accessConfigs": [
+          {
+            "kind": "compute#accessConfig",
+            "name": "external-nat",
+            "natIP": "34.145.28.40",
+            "networkTier": "PREMIUM",
+            "type": "ONE_TO_ONE_NAT"
+          }
+        ],
+        "fingerprint": "Km1fPm3qvEw=",
+        "kind": "compute#networkInterface",
+        "name": "nic0",
+        "network": "https://www.googleapis.com/compute/v1/projects/your-gcp-project-id/global/networks/default",
+        "networkIP": "10.138.0.87",
+        "nicType": "GVNIC",
+        "stackType": "IPV4_ONLY",
+        "subnetwork": "https://www.googleapis.com/compute/v1/projects/your-gcp-project-id/regions/us-west1/subnetworks/default"
+      },
+      {
+        "fingerprint": "HqrSgDpcOCE=",
+        "kind": "compute#networkInterface",
+        "name": "nic1",
+        "network": "https://www.googleapis.com/compute/v1/projects/your-gcp-project-id/global/networks/glm-a3mega-net-1",
+        "networkIP": "192.168.1.2",
+        "nicType": "GVNIC",
+        "stackType": "IPV4_ONLY",
+        "subnetwork": "https://www.googleapis.com/compute/v1/projects/your-gcp-project-id/regions/us-west1/subnetworks/glm-a3mega-sub-1"
+      },
+      {
+        "fingerprint": "ccfWP5i_dbI=",
+        "kind": "compute#networkInterface",
+        "name": "nic2",
+        "network": "https://www.googleapis.com/compute/v1/projects/your-gcp-project-id/global/networks/glm-a3mega-net-2",
+        "networkIP": "192.168.2.2",
+        "nicType": "GVNIC",
+        "stackType": "IPV4_ONLY",
+        "subnetwork": "https://www.googleapis.com/compute/v1/projects/your-gcp-project-id/regions/us-west1/subnetworks/glm-a3mega-sub-2"
+      },
+      {
+        "fingerprint": "VD-NybxO8yI=",
+        "kind": "compute#networkInterface",
+        "name": "nic3",
+        "network": "https://www.googleapis.com/compute/v1/projects/your-gcp-project-id/global/networks/glm-a3mega-net-3",
+        "networkIP": "192.168.3.2",
+        "nicType": "GVNIC",
+        "stackType": "IPV4_ONLY",
+        "subnetwork": "https://www.googleapis.com/compute/v1/projects/your-gcp-project-id/regions/us-west1/subnetworks/glm-a3mega-sub-3"
+      },
+      {
+        "fingerprint": "xQklDSp5JPY=",
+        "kind": "compute#networkInterface",
+        "name": "nic4",
+        "network": "https://www.googleapis.com/compute/v1/projects/your-gcp-project-id/global/networks/glm-a3mega-net-4",
+        "networkIP": "192.168.4.2",
+        "nicType": "GVNIC",
+        "stackType": "IPV4_ONLY",
+        "subnetwork": "https://www.googleapis.com/compute/v1/projects/your-gcp-project-id/regions/us-west1/subnetworks/glm-a3mega-sub-4"
+      },
+      {
+        "fingerprint": "XcfosSPRjYU=",
+        "kind": "compute#networkInterface",
+        "name": "nic5",
+        "network": "https://www.googleapis.com/compute/v1/projects/your-gcp-project-id/global/networks/glm-a3mega-net-5",
+        "networkIP": "192.168.5.2",
+        "nicType": "GVNIC",
+        "stackType": "IPV4_ONLY",
+        "subnetwork": "https://www.googleapis.com/compute/v1/projects/your-gcp-project-id/regions/us-west1/subnetworks/glm-a3mega-sub-5"
+      },
+      {
+        "fingerprint": "El_nJwT-bbU=",
+        "kind": "compute#networkInterface",
+        "name": "nic6",
+        "network": "https://www.googleapis.com/compute/v1/projects/your-gcp-project-id/global/networks/glm-a3mega-net-6",
+        "networkIP": "192.168.6.2",
+        "nicType": "GVNIC",
+        "stackType": "IPV4_ONLY",
+        "subnetwork": "https://www.googleapis.com/compute/v1/projects/your-gcp-project-id/regions/us-west1/subnetworks/glm-a3mega-sub-6"
+      },
+      {
+        "fingerprint": "MdRw54qPu34=",
+        "kind": "compute#networkInterface",
+        "name": "nic7",
+        "network": "https://www.googleapis.com/compute/v1/projects/your-gcp-project-id/global/networks/glm-a3mega-net-7",
+        "networkIP": "192.168.7.2",
+        "nicType": "GVNIC",
+        "stackType": "IPV4_ONLY",
+        "subnetwork": "https://www.googleapis.com/compute/v1/projects/your-gcp-project-id/regions/us-west1/subnetworks/glm-a3mega-sub-7"
+      },
+      {
+        "fingerprint": "PZe1xG2ewQw=",
+        "kind": "compute#networkInterface",
+        "name": "nic8",
+        "network": "https://www.googleapis.com/compute/v1/projects/your-gcp-project-id/global/networks/glm-a3mega-net-8",
+        "networkIP": "192.168.8.2",
+        "nicType": "GVNIC",
+        "stackType": "IPV4_ONLY",
+        "subnetwork": "https://www.googleapis.com/compute/v1/projects/your-gcp-project-id/regions/us-west1/subnetworks/glm-a3mega-sub-8"
+      }
+    ],
+    "zone": "https://www.googleapis.com/compute/v1/projects/your-gcp-project-id/zones/us-west1-b"
+  }
+]

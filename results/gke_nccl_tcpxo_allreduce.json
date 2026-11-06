@@ -1,0 +1,42 @@
+{
+  "world_size": 16,
+  "nccl_fastrak_ifname": "eth1,eth2,eth3,eth4,eth5,eth6,eth7,eth8",
+  "nccl_tuner_plugin": "libnccl-tuner.so",
+  "results": [
+    {
+      "size_mb": 1,
+      "latency_ms": 0.119,
+      "alg_bw_gbs": 8.22,
+      "bus_bw_gbs": 15.42,
+      "bus_bw_gbps": 123.4
+    },
+    {
+      "size_mb": 16,
+      "latency_ms": 0.283,
+      "alg_bw_gbs": 55.27,
+      "bus_bw_gbs": 103.63,
+      "bus_bw_gbps": 829.1
+    },
+    {
+      "size_mb": 128,
+      "latency_ms": 1.13,
+      "alg_bw_gbs": 110.61,
+      "bus_bw_gbs": 207.39,
+      "bus_bw_gbps": 1659.1
+    },
+    {
+      "size_mb": 512,
+      "latency_ms": 3.579,
+      "alg_bw_gbs": 139.71,
+      "bus_bw_gbs": 261.95,
+      "bus_bw_gbps": 2095.6
+    },
+    {
+      "size_mb": 1024,
+      "latency_ms": 6.513,
+      "alg_bw_gbs": 153.54,
+      "bus_bw_gbs": 287.88,
+      "bus_bw_gbps": 2303.0
+    }
+  ]
+}

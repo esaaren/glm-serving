@@ -1,0 +1,159 @@
+apiVersion: networking.gke.io/v1
+kind: GKENetworkParamSet
+metadata:
+  name: vpc1
+spec:
+  vpc: glm-a3mega-net-1
+  vpcSubnet: glm-a3mega-sub-1
+  deviceMode: NetDevice
+---
+apiVersion: networking.gke.io/v1
+kind: Network
+metadata:
+  name: vpc1
+spec:
+  type: Device
+  parametersRef:
+    group: networking.gke.io
+    kind: GKENetworkParamSet
+    name: vpc1
+---
+apiVersion: networking.gke.io/v1
+kind: GKENetworkParamSet
+metadata:
+  name: vpc2
+spec:
+  vpc: glm-a3mega-net-2
+  vpcSubnet: glm-a3mega-sub-2
+  deviceMode: NetDevice
+---
+apiVersion: networking.gke.io/v1
+kind: Network
+metadata:
+  name: vpc2
+spec:
+  type: Device
+  parametersRef:
+    group: networking.gke.io
+    kind: GKENetworkParamSet
+    name: vpc2
+---
+apiVersion: networking.gke.io/v1
+kind: GKENetworkParamSet
+metadata:
+  name: vpc3
+spec:
+  vpc: glm-a3mega-net-3
+  vpcSubnet: glm-a3mega-sub-3
+  deviceMode: NetDevice
+---
+apiVersion: networking.gke.io/v1
+kind: Network
+metadata:
+  name: vpc3
+spec:
+  type: Device
+  parametersRef:
+    group: networking.gke.io
+    kind: GKENetworkParamSet
+    name: vpc3
+---
+apiVersion: networking.gke.io/v1
+kind: GKENetworkParamSet
+metadata:
+  name: vpc4
+spec:
+  vpc: glm-a3mega-net-4
+  vpcSubnet: glm-a3mega-sub-4
+  deviceMode: NetDevice
+---
+apiVersion: networking.gke.io/v1
+kind: Network
+metadata:
+  name: vpc4
+spec:
+  type: Device
+  parametersRef:
+    group: networking.gke.io
+    kind: GKENetworkParamSet
+    name: vpc4
+---
+apiVersion: networking.gke.io/v1
+kind: GKENetworkParamSet
+metadata:
+  name: vpc5
+spec:
+  vpc: glm-a3mega-net-5
+  vpcSubnet: glm-a3mega-sub-5
+  deviceMode: NetDevice
+---
+apiVersion: networking.gke.io/v1
+kind: Network
+metadata:
+  name: vpc5
+spec:
+  type: Device
+  parametersRef:
+    group: networking.gke.io
+    kind: GKENetworkParamSet
+    name: vpc5
+---
+apiVersion: networking.gke.io/v1
+kind: GKENetworkParamSet
+metadata:
+  name: vpc6
+spec:
+  vpc: glm-a3mega-net-6
+  vpcSubnet: glm-a3mega-sub-6
+  deviceMode: NetDevice
+---
+apiVersion: networking.gke.io/v1
+kind: Network
+metadata:
+  name: vpc6
+spec:
+  type: Device
+  parametersRef:
+    group: networking.gke.io
+    kind: GKENetworkParamSet
+    name: vpc6
+---
+apiVersion: networking.gke.io/v1
+kind: GKENetworkParamSet
+metadata:
+  name: vpc7
+spec:
+  vpc: glm-a3mega-net-7
+  vpcSubnet: glm-a3mega-sub-7
+  deviceMode: NetDevice
+---
+apiVersion: networking.gke.io/v1
+kind: Network
+metadata:
+  name: vpc7
+spec:
+  type: Device
+  parametersRef:
+    group: networking.gke.io
+    kind: GKENetworkParamSet
+    name: vpc7
+---
+apiVersion: networking.gke.io/v1
+kind: GKENetworkParamSet
+metadata:
+  name: vpc8
+spec:
+  vpc: glm-a3mega-net-8
+  vpcSubnet: glm-a3mega-sub-8
+  deviceMode: NetDevice
+---
+apiVersion: networking.gke.io/v1
+kind: Network
+metadata:
+  name: vpc8
+spec:
+  type: Device
+  parametersRef:
+    group: networking.gke.io
+    kind: GKENetworkParamSet
+    name: vpc8

@@ -1,0 +1,94 @@
+# nccl-tests version 2.18.4 nccl-headers=22807 nccl-library=22807
+# Collective test starting: all_gather_perf
+# nThread 1 nGpus 1 minBytes 8 maxBytes 8589934592 step: 2(factor) warmup iters: 5 iters: 20 agg iters: 1 validation: 1 graph: 0 unalign: 0
+#
+# Using devices
+#  Rank  0 Group  0 Pid    880 on      host1 device  0 [0000:04:00] NVIDIA H100 80GB HBM3
+#  Rank  1 Group  0 Pid    894 on      host1 device  1 [0000:05:00] NVIDIA H100 80GB HBM3
+#  Rank  2 Group  0 Pid    920 on      host1 device  2 [0000:0b:00] NVIDIA H100 80GB HBM3
+#  Rank  3 Group  0 Pid    961 on      host1 device  3 [0000:0c:00] NVIDIA H100 80GB HBM3
+#  Rank  4 Group  0 Pid    967 on      host1 device  4 [0000:84:00] NVIDIA H100 80GB HBM3
+#  Rank  5 Group  0 Pid    981 on      host1 device  5 [0000:85:00] NVIDIA H100 80GB HBM3
+#  Rank  6 Group  0 Pid    985 on      host1 device  6 [0000:8b:00] NVIDIA H100 80GB HBM3
+#  Rank  7 Group  0 Pid    993 on      host1 device  7 [0000:8c:00] NVIDIA H100 80GB HBM3
+#  Rank  8 Group  0 Pid    808 on      host2 device  0 [0000:04:00] NVIDIA H100 80GB HBM3
+#  Rank  9 Group  0 Pid    814 on      host2 device  1 [0000:05:00] NVIDIA H100 80GB HBM3
+#  Rank 10 Group  0 Pid    841 on      host2 device  2 [0000:0b:00] NVIDIA H100 80GB HBM3
+#  Rank 11 Group  0 Pid    843 on      host2 device  3 [0000:0c:00] NVIDIA H100 80GB HBM3
+#  Rank 12 Group  0 Pid    868 on      host2 device  4 [0000:84:00] NVIDIA H100 80GB HBM3
+#  Rank 13 Group  0 Pid    884 on      host2 device  5 [0000:85:00] NVIDIA H100 80GB HBM3
+#  Rank 14 Group  0 Pid    886 on      host2 device  6 [0000:8b:00] NVIDIA H100 80GB HBM3
+#  Rank 15 Group  0 Pid    898 on      host2 device  7 [0000:8c:00] NVIDIA H100 80GB HBM3
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1793974629.332259     880 init.cc:112] Current time zone: UTC
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1793974629.334583     961 init.cc:112] Current time zone: UTC
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1793974629.335333     920 init.cc:112] Current time zone: UTC
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1793974629.335473     894 init.cc:112] Current time zone: UTC
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1793974629.336733     993 init.cc:112] Current time zone: UTC
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1793974629.337109     981 init.cc:112] Current time zone: UTC
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1793974629.337278     985 init.cc:112] Current time zone: UTC
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1793974629.338258     967 init.cc:112] Current time zone: UTC
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1793974629.349840     814 init.cc:112] Current time zone: UTC
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1793974629.349657     841 init.cc:112] Current time zone: UTC
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1793974629.349842     886 init.cc:112] Current time zone: UTC
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1793974629.349994     884 init.cc:112] Current time zone: UTC
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1793974629.350585     843 init.cc:112] Current time zone: UTC
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1793974629.350853     808 init.cc:112] Current time zone: UTC
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1793974629.351987     898 init.cc:112] Current time zone: UTC
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1793974629.352447     868 init.cc:112] Current time zone: UTC
+#
+#                                                              out-of-place                       in-place          
+#       size         count      type   redop    root     time   algbw   busbw  #wrong     time   algbw   busbw  #wrong 
+#        (B)    (elements)                               (us)  (GB/s)  (GB/s)             (us)  (GB/s)  (GB/s)         
+           0             0     float    none      -1     0.36    0.00    0.00       0     0.27    0.00    0.00       0
+           0             0     float    none      -1     0.31    0.00    0.00       0     0.25    0.00    0.00       0
+           0             0     float    none      -1     0.24    0.00    0.00       0     0.26    0.00    0.00       0
+           0             0     float    none      -1     0.25    0.00    0.00       0     0.24    0.00    0.00       0
+           0             0     float    none      -1     0.26    0.00    0.00       0     0.24    0.00    0.00       0
+         256             4     float    none      -1   107.31    0.00    0.00       0   102.56    0.00    0.00       0
+         512             8     float    none      -1   106.24    0.00    0.00       0   103.38    0.00    0.00       0
+        1024            16     float    none      -1   103.35    0.01    0.01       0   104.04    0.01    0.01       0
+        2048            32     float    none      -1   102.97    0.02    0.02       0   102.41    0.02    0.02       0
+        4096            64     float    none      -1   103.27    0.04    0.04       0   103.78    0.04    0.04       0
+        8192           128     float    none      -1   102.09    0.08    0.08       0   102.45    0.08    0.07       0
+       16384           256     float    none      -1   102.37    0.16    0.15       0   102.04    0.16    0.15       0
+       32768           512     float    none      -1   109.32    0.30    0.28       0   107.07    0.31    0.29       0
+       65536          1024     float    none      -1   116.46    0.56    0.53       0   111.16    0.59    0.55       0
+      131072          2048     float    none      -1   113.02    1.16    1.09       0   119.60    1.10    1.03       0
+      262144          4096     float    none      -1   140.98    1.86    1.74       0   145.18    1.81    1.69       0
+      524288          8192     float    none      -1   150.31    3.49    3.27       0   143.94    3.64    3.41       0
+     1048576         16384     float    none      -1   146.29    7.17    6.72       0   152.89    6.86    6.43       0
+     2097152         32768     float    none      -1   160.74   13.05   12.23       0   165.95   12.64   11.85       0
+     4194304         65536     float    none      -1   163.98   25.58   23.98       0   171.96   24.39   22.87       0
+     8388608        131072     float    none      -1   189.47   44.27   41.51       0   185.29   45.27   42.44       0
+    16777216        262144     float    none      -1   241.08   69.59   65.24       0   229.18   73.21   68.63       0
+    33554432        524288     float    none      -1   302.92  110.77  103.85       0   304.42  110.23  103.34       0
+    67108864       1048576     float    none      -1   462.78  145.01  135.95       0   453.30  148.04  138.79       0
+   134217728       2097152     float    none      -1   821.59  163.36  153.15       0   818.58  163.96  153.72       0
+   268435456       4194304     float    none      -1  1516.67  176.99  165.93       0  1533.19  175.08  164.14       0
+   536870912       8388608     float    none      -1  2916.70  184.07  172.56       0  2919.69  183.88  172.39       0
+  1073741824      16777216     float    none      -1  5522.55  194.43  182.28       0  5529.55  194.18  182.05       0
+  2147483648      33554432     float    none      -1  10856.2  197.81  185.45       0  10828.4  198.32  185.92       0
+  4294967296      67108864     float    none      -1  21488.2  199.88  187.38       0  21474.2  200.01  187.51       0
+  8589934592     134217728     float    none      -1  42755.3  200.91  188.35       0  42733.1  201.01  188.45       0
+# Out of bounds values : 0 OK
+# Avg bus bandwidth    : 52.7029 
+#
+# Collective test concluded: all_gather_perf
+#
+

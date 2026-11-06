@@ -1,0 +1,53 @@
+nameOverride: "glm-vllm"
+
+image:
+  vllm: "vllm/vllm-openai:nightly"
+  tcpxoDaemon: "us-docker.pkg.dev/gce-ai-infra/gpudirect-tcpxo/tcpgpudmarxd-dev:v1.0.23"
+  pullPolicy: IfNotPresent
+
+model:
+  repoId: "zai-org/GLM-5.3-Flash"
+  servedName: "zai-org/GLM-5.3-Flash"
+  tokenizerMode: "glm5_next"
+  maxModelLen: 131072
+  maxNumSeqs: 256
+  maxNumBatchedTokens: 8192
+  gpuMemoryUtilization: 0.90
+
+topology:
+  nnodes: 1
+  gpusPerNode: 8
+  tensorParallelSize: 8
+  pipelineParallelSize: 1
+  enableExpertParallel: false
+  masterPort: 29501
+
+tcpxo:
+  enabled: true
+  numHops: 2
+  numNics: 8
+  runNcclPrecheck: true
+
+storage:
+  hostLocalSsdPath: "/var/lib/kubelet/glm-cache"
+  shmSizeLimit: "32Gi"
+
+benchmarks:
+  reasoningEffort: "low"
+  outputTokens: 1024
+  runs:
+    - name: "gke_single_node_tp8_fp8_c64_4k"
+      numPrompts: 64
+      concurrency: 64
+      inputTokens: 4096
+      warmup: true
+    - name: "gke_single_node_tp8_fp8_c256_4k"
+      numPrompts: 256
+      concurrency: 256
+      inputTokens: 4096
+      warmup: false
+    - name: "gke_single_node_tp8_fp8_c8_120k"
+      numPrompts: 8
+      concurrency: 8
+      inputTokens: 120000
+      warmup: false

@@ -1,0 +1,6 @@
+apiVersion: v2
+name: glm-vllm-benchmark
+description: Helm chart for running GLM-5.3-Flash (FP8 & BF16) Single-Node (8x H100) and Multi-Node (16x H100 GPUDirect-TCPXO) vLLM Legal Benchmarks on GKE A3-Mega
+type: application
+version: 1.0.0
+appVersion: "0.19.1"

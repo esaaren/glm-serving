@@ -1,0 +1,37 @@
+model:
+  repoId: "zai-org/GLM-5.3-Flash"
+  servedName: "zai-org/GLM-5.3-Flash"
+  maxModelLen: 131072
+  maxNumSeqs: 256
+  maxNumBatchedTokens: 8192
+  gpuMemoryUtilization: 0.90
+
+topology:
+  nnodes: 1
+  gpusPerNode: 8
+  tensorParallelSize: 8
+  pipelineParallelSize: 1
+
+tcpxo:
+  enabled: true
+  runNcclPrecheck: false
+
+benchmarks:
+  reasoningEffort: "low"
+  outputTokens: 1024
+  runs:
+    - name: "gke_single_node_8xH100_tp8_fp8_c64_4k"
+      numPrompts: 64
+      concurrency: 64
+      inputTokens: 4096
+      warmup: true
+    - name: "gke_single_node_8xH100_tp8_fp8_c256_4k"
+      numPrompts: 256
+      concurrency: 256
+      inputTokens: 4096
+      warmup: false
+    - name: "gke_single_node_8xH100_tp8_fp8_c8_120k"
+      numPrompts: 8
+      concurrency: 8
+      inputTokens: 120000
+      warmup: false

@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.nameOverride }}-scripts
+  labels:
+    app: {{ .Values.nameOverride }}
+data:
+  download_models.py: |-
+{{ .Files.Get "files/download_models.py" | indent 4 }}
+  generate_legal_dataset.py: |-
+{{ .Files.Get "files/generate_legal_dataset.py" | indent 4 }}
+  legal_benchmark.py: |-
+{{ .Files.Get "files/legal_benchmark.py" | indent 4 }}
+  nccl_tcpxo_precheck.py: |-
+{{ .Files.Get "files/nccl_tcpxo_precheck.py" | indent 4 }}

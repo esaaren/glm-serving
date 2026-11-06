@@ -1,0 +1,288 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ .Values.nameOverride }}-bench
+  labels:
+    app: {{ .Values.nameOverride }}
+    role: head
+spec:
+  backoffLimit: 0
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.nameOverride }}
+        role: head
+        tcpxo: daemon
+      annotations:
+        {{- if .Values.tcpxo.enabled }}
+        devices.gke.io/container.tcpxo-daemon: |+
+          - path: /dev/nvidia0
+          - path: /dev/nvidia1
+          - path: /dev/nvidia2
+          - path: /dev/nvidia3
+          - path: /dev/nvidia4
+          - path: /dev/nvidia5
+          - path: /dev/nvidia6
+          - path: /dev/nvidia7
+          - path: /dev/nvidiactl
+          - path: /dev/nvidia-uvm
+          - path: /dev/dmabuf_import_helper
+        networking.gke.io/default-interface: 'eth0'
+        networking.gke.io/interfaces: |
+          [
+            {"interfaceName":"eth0","network":"default"},
+            {"interfaceName":"eth1","network":"vpc1"},
+            {"interfaceName":"eth2","network":"vpc2"},
+            {"interfaceName":"eth3","network":"vpc3"},
+            {"interfaceName":"eth4","network":"vpc4"},
+            {"interfaceName":"eth5","network":"vpc5"},
+            {"interfaceName":"eth6","network":"vpc6"},
+            {"interfaceName":"eth7","network":"vpc7"},
+            {"interfaceName":"eth8","network":"vpc8"}
+          ]
+        {{- end }}
+    spec:
+      restartPolicy: Never
+      hostname: head
+      subdomain: {{ .Values.nameOverride }}-headless
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                  - key: app
+                    operator: In
+                    values:
+                      - {{ .Values.nameOverride }}
+              topologyKey: "kubernetes.io/hostname"
+      tolerations:
+        - key: "nvidia.com/gpu"
+          operator: "Exists"
+          effect: "NoSchedule"
+      {{- if .Values.tcpxo.enabled }}
+      initContainers:
+        - name: tcpxo-daemon
+          image: {{ .Values.image.tcpxoDaemon }}
+          imagePullPolicy: Always
+          restartPolicy: Always
+          command: ["/bin/sh", "-c"]
+          args:
+            - |
+              set -ex
+              chmod 755 /fts/entrypoint_rxdm_container.sh
+              /fts/entrypoint_rxdm_container.sh --num_hops={{ .Values.tcpxo.numHops }}
+          securityContext:
+            privileged: true
+            capabilities:
+              add:
+                - NET_ADMIN
+                - NET_BIND_SERVICE
+          volumeMounts:
+            - name: nvidia
+              mountPath: /usr/local/nvidia/lib64
+            - name: sys
+              mountPath: /hostsysfs
+            - name: proc-sys
+              mountPath: /hostprocsysfs
+          env:
+            - name: LD_LIBRARY_PATH
+              value: /usr/local/nvidia/lib64
+          startupProbe:
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            timeoutSeconds: 2
+            successThreshold: 1
+            failureThreshold: 24
+            exec:
+              command:
+                - pgrep
+                - -f
+                - fastrak_gpumem_manager
+      {{- end }}
+      containers:
+        - name: vllm-head-and-bench
+          image: {{ .Values.image.vllm }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          securityContext:
+            privileged: true
+          command: ["/bin/bash", "-c"]
+          args:
+            - |
+              set -euo pipefail
+              ulimit -n 1048576 || true
+              ulimit -l unlimited || true
+              rm -rf /mnt/boot_cleanup/glm-cache 2>/dev/null || true
+              mkdir -p /mnt/localssd/hf_cache/hub /mnt/localssd/vllm_root /mnt/localssd/results /mnt/localssd/torchinductor
+              df -h /mnt/localssd /mnt/boot_cleanup
+              export TORCHINDUCTOR_CACHE_DIR=/mnt/localssd/torchinductor
+              export HF_HOME=/mnt/localssd/hf_cache
+              export HF_XET_HIGH_PERFORMANCE=1
+              export PYTHONPATH="/scripts:${PYTHONPATH:-}"
+
+              {{- if .Values.tcpxo.enabled }}
+              export NCCL_LIB_DIR="/usr/local/nvidia/lib64"
+              if [[ -f "${NCCL_LIB_DIR}/nccl-env-profile.sh" ]]; then
+                source "${NCCL_LIB_DIR}/nccl-env-profile.sh"
+              fi
+              export LD_LIBRARY_PATH="/usr/local/lib/python3.12/dist-packages/nvidia/nccl/lib:/usr/local/nvidia/lib64:${LD_LIBRARY_PATH:-}"
+              export NCCL_FASTRAK_LLCM_DEVICE_DIRECTORY="/dev/aperture_devices"
+              export NCCL_FASTRAK_CTRL_DEV="eth0"
+              export NCCL_FASTRAK_IFNAME="eth1,eth2,eth3,eth4,eth5,eth6,eth7,eth8"
+              export NCCL_SOCKET_IFNAME="eth0"
+              export GLOO_SOCKET_IFNAME="eth0"
+              export NCCL_CROSS_NIC=0
+              {{- end }}
+
+              echo "=== [Head Node 0] Network Interfaces & GPU Topology ==="
+              ip -br addr show
+              nvidia-smi -L
+
+              echo "=== [Head Node 0] Ensuring Model {{ .Values.model.repoId }} is Downloaded on Local NVMe ==="
+              python3 /scripts/download_models.py --model "{{ .Values.model.repoId }}" --cache-dir /mnt/localssd/hf_cache/hub
+
+              HEAD_IP=$(ip -o -4 addr show dev eth0 | awk '{print $4}' | cut -d/ -f1)
+              echo "Head Pod eth0 IP: ${HEAD_IP}"
+
+              {{- if and (gt (int .Values.topology.nnodes) 1) .Values.tcpxo.runNcclPrecheck }}
+              echo "=== [Head Node 0] Running 2-Node (16-GPU) GPUDirect-TCPXO NCCL AllReduce Verification ==="
+              torchrun \
+                --nnodes={{ .Values.topology.nnodes }} \
+                --nproc_per_node={{ .Values.topology.gpusPerNode }} \
+                --node_rank=0 \
+                --master_addr="${HEAD_IP}" \
+                --master_port=29500 \
+                /scripts/nccl_tcpxo_precheck.py
+              {{- end }}
+
+              echo "=== [Head Node 0] Launching vLLM Server ({{ .Values.model.repoId }}, TP={{ .Values.topology.tensorParallelSize }}, nnodes={{ .Values.topology.nnodes }}) ==="
+              vllm serve "{{ .Values.model.repoId }}" \
+                --served-model-name "{{ .Values.model.servedName }}" \
+                --host 0.0.0.0 \
+                --port 8000 \
+                --tokenizer-mode "{{ .Values.model.tokenizerMode }}" \
+                --no-numa-bind \
+                --tensor-parallel-size {{ .Values.topology.tensorParallelSize }} \
+                --pipeline-parallel-size {{ .Values.topology.pipelineParallelSize }} \
+                {{- if .Values.topology.enableExpertParallel }}
+                --enable-expert-parallel \
+                {{- end }}
+                {{- if gt (int .Values.topology.nnodes) 1 }}
+                --nnodes {{ .Values.topology.nnodes }} \
+                --node-rank 0 \
+                --master-addr "${HEAD_IP}" \
+                --master-port {{ .Values.topology.masterPort }} \
+                {{- end }}
+                --max-model-len {{ .Values.model.maxModelLen }} \
+                --max-num-seqs {{ .Values.model.maxNumSeqs }} \
+                --max-num-batched-tokens {{ .Values.model.maxNumBatchedTokens }} \
+                --gpu-memory-utilization {{ .Values.model.gpuMemoryUtilization }} \
+                --disable-flashinfer-autotune \
+                --tool-call-parser glm47 \
+                --enable-auto-tool-choice \
+                --reasoning-parser glm47 \
+                > /mnt/localssd/results/vllm_server.log 2>&1 &
+              VLLM_PID=$!
+
+              echo "=== [Head Node 0] Waiting for vLLM Server on :8000/health ==="
+              for i in $(seq 1 300); do
+                if ! kill -0 "${VLLM_PID}" 2>/dev/null; then
+                  echo "ERROR: vLLM server exited prematurely! Last 60 log lines:"
+                  tail -n 60 /mnt/localssd/results/vllm_server.log
+                  exit 1
+                fi
+                if curl -s -f http://localhost:8000/health >/dev/null 2>&1; then
+                  echo "vLLM Server READY after $((i*5))s!"
+                  break
+                fi
+                if (( i % 6 == 0 )); then
+                  echo "[Wait $((i*5))s] Latest vLLM startup log:"
+                  tail -n 5 /mnt/localssd/results/vllm_server.log || true
+                fi
+                sleep 5
+              done
+
+              echo "=== [Head Node 0] vLLM Memory & KV Cache Allocation Summary ==="
+              grep -E "Model loading took|GPU KV cache size|Maximum concurrency|Graph capturing finished" /mnt/localssd/results/vllm_server.log || true
+
+              {{- range .Values.benchmarks.runs }}
+              echo "=== Running Legal Benchmark: {{ .name }} (c={{ .concurrency }}, in={{ .inputTokens }}, out={{ $.Values.benchmarks.outputTokens }}) ==="
+              python3 /scripts/legal_benchmark.py \
+                --base-url http://localhost:8000 \
+                --model "{{ $.Values.model.servedName }}" \
+                --config-name "{{ .name }}" \
+                --num-prompts {{ .numPrompts }} \
+                --concurrency {{ .concurrency }} \
+                --input-tokens {{ .inputTokens }} \
+                --output-tokens {{ $.Values.benchmarks.outputTokens }} \
+                --reasoning-effort "{{ $.Values.benchmarks.reasoningEffort }}" \
+                {{- if not .warmup }}
+                --skip-warmup \
+                {{- end }}
+                --output-json "/mnt/localssd/results/{{ .name }}.json"
+              echo "BENCHMARK_JSON_RESULT_START:{{ .name }}.json"
+              cat "/mnt/localssd/results/{{ .name }}.json"
+              echo "BENCHMARK_JSON_RESULT_END:{{ .name }}.json"
+              {{- end }}
+
+              echo "=== All GKE vLLM Legal Benchmarks Complete ==="
+              kill "${VLLM_PID}" 2>/dev/null || true
+          env:
+            - name: VLLM_ENGINE_READY_TIMEOUT_S
+              value: "3600"
+            - name: VLLM_USE_RUST_FRONTEND
+              value: "1"
+          volumeMounts:
+            - name: localssd
+              mountPath: /mnt/localssd
+            - name: boot-cleanup
+              mountPath: /mnt/boot_cleanup
+            - name: vllm-root
+              mountPath: /root
+            - name: scripts
+              mountPath: /scripts
+            - name: shared-memory
+              mountPath: /dev/shm
+            {{- if .Values.tcpxo.enabled }}
+            - name: nvidia
+              mountPath: /usr/local/nvidia/lib64
+            - name: aperture-devices
+              mountPath: /dev/aperture_devices
+            {{- end }}
+          resources:
+            limits:
+              nvidia.com/gpu: {{ .Values.topology.gpusPerNode }}
+      volumes:
+        - name: localssd
+          hostPath:
+            path: {{ .Values.storage.hostLocalSsdPath }}
+            type: DirectoryOrCreate
+        - name: boot-cleanup
+          hostPath:
+            path: /mnt/stateful_partition/kube-ephemeral-disks
+            type: DirectoryOrCreate
+        - name: vllm-root
+          hostPath:
+            path: {{ .Values.storage.hostLocalSsdPath }}/vllm_root
+            type: DirectoryOrCreate
+        - name: scripts
+          configMap:
+            name: {{ .Values.nameOverride }}-scripts
+            defaultMode: 0755
+        - name: shared-memory
+          emptyDir:
+            medium: "Memory"
+            sizeLimit: {{ .Values.storage.shmSizeLimit }}
+        {{- if .Values.tcpxo.enabled }}
+        - name: nvidia
+          hostPath:
+            path: /home/kubernetes/bin/nvidia/lib64
+        - name: sys
+          hostPath:
+            path: /sys
+        - name: proc-sys
+          hostPath:
+            path: /proc/sys
+        - name: aperture-devices
+          hostPath:
+            path: /dev/aperture_devices
+        {{- end }}
